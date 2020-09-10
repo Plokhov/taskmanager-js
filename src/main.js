@@ -1,51 +1,79 @@
-import {createSiteMenuTemplate} from "./view/site-menu.js";
-import {createSiteFilterTemplate} from "./view/site-filter/site-filter.js";
-import {createSiteBoardTemplate} from "./view/board.js";
-import {createBoardSortTemplate} from "./view/board-sort.js";
-import {createTasksListTemplate} from "./view/tast-list.js";
-import {createTaskTemplate} from "./view/task.js";
-import {createTaskEditTemplate} from "./view/task-edit/task-edit.js";
-import {createLoadMoreButtonTemplate} from "./view/load-more.js";
+import SiteMenu from "./view/site-menu.js";
+import Filter from "./view/site-filter/site-filter.js";
+import Board from "./view/board.js";
+import BoardSort from "./view/board-sort.js";
+import TaskList from "./view/tast-list.js";
+import Task from "./view/task.js";
+import TaskEdit from "./view/task-edit/task-edit.js";
+import LoadMoreButton from "./view/load-more.js";
 
 import {generateTask} from "./mock/task.js";
 import {generateFilter} from "./mock/filter.js";
 
-const TASK_COUNT = 36;
+import {render, RenderPosition} from "./utils.js";
+
+const renderTask = (taskListElement, task) => {
+  const taskComponent = new Task(task);
+  const taskEditComponent = new TaskEdit(task);
+
+  const replaceCardToForm = () => {
+    taskListElement
+      .replaceChild(taskEditComponent.getElement(), taskComponent.getElement());
+  };
+
+  const replaceFormToCard = () => {
+    taskListElement
+      .replaceChild(taskComponent.getElement(), taskEditComponent.getElement());
+  };
+
+  taskComponent
+    .getElement()
+    .querySelector(`.card__btn--edit`)
+    .addEventListener(`click`, () => {
+      replaceCardToForm();
+    });
+
+  taskEditComponent
+    .getElement()
+    .querySelector(`form`)
+    .addEventListener(`submit`, (evt) => {
+      evt.preventDefault();
+      replaceFormToCard();
+    });
+
+  render(taskListElement, taskComponent.getElement(), RenderPosition.BEFOREEND);
+};
+
+const TASK_COUNT = 9;
 const TASK_COUNT_PER_STEP = 8;
 
 const tasks = new Array(TASK_COUNT).fill().map(generateTask);
 const filters = generateFilter(tasks);
 
-const render = (container, template, place) => {
-  container.insertAdjacentHTML(place, template);
-};
-
 const siteMainElement = document.querySelector(`.main`);
 const siteMainControlElement = document.querySelector(`.main__control`);
 
-render(siteMainControlElement, createSiteMenuTemplate(), `beforeend`);
+render(siteMainControlElement, new SiteMenu().getElement(), RenderPosition.BEFOREEND);
 
-render(siteMainElement, createSiteFilterTemplate(filters), `beforeend`);
+render(siteMainElement, new Filter(filters).getElement(), RenderPosition.BEFOREEND);
 
-render(siteMainElement, createSiteBoardTemplate(), `beforeend`);
+render(siteMainElement, new Board().getElement(), RenderPosition.BEFOREEND);
 
 const siteBoardElement = document.querySelector(`.board`);
 
-render(siteBoardElement, createBoardSortTemplate(), `beforeend`);
-render(siteBoardElement, createTasksListTemplate(), `beforeend`);
+render(siteBoardElement, new BoardSort().getElement(), RenderPosition.BEFOREEND);
+render(siteBoardElement, new TaskList().getElement(), RenderPosition.BEFOREEND);
 
 const siteTasksListElement = document.querySelector(`.board__tasks`);
 
-render(siteTasksListElement, createTaskEditTemplate(tasks[0]), `beforeend`);
-
-for (let i = 1; i < Math.min(tasks.length, TASK_COUNT_PER_STEP); i++) {
-  render(siteTasksListElement, createTaskTemplate(tasks[i]), `beforeend`);
+for (let i = 0; i < Math.min(tasks.length, TASK_COUNT_PER_STEP); i++) {
+  renderTask(siteTasksListElement, tasks[i]);
 }
 
 if (tasks.length > TASK_COUNT_PER_STEP) {
   let renderedTaskCount = TASK_COUNT_PER_STEP;
 
-  render(siteBoardElement, createLoadMoreButtonTemplate(), `beforeend`);
+  render(siteBoardElement, new LoadMoreButton().getElement(), RenderPosition.BEFOREEND);
 
   const loadMoreButton = siteBoardElement.querySelector(`.load-more`);
 
@@ -54,7 +82,7 @@ if (tasks.length > TASK_COUNT_PER_STEP) {
 
     tasks
     .slice(renderedTaskCount, renderedTaskCount + TASK_COUNT_PER_STEP)
-    .forEach((task) => render(siteTasksListElement, createTaskTemplate(task), `beforeend`));
+    .forEach((task) => renderTask(siteTasksListElement, task));
 
     renderedTaskCount += TASK_COUNT_PER_STEP;
 
