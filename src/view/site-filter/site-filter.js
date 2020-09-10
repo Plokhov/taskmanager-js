@@ -1,13 +1,32 @@
-import {createFilterItemTemplate} from "./filter-item.js";
+import FilterItem from "./filter-item.js";
+import {createElement} from "../../utils.js";
 
-export const createSiteFilterTemplate = (filterItems) => {
-  const filterItemsTemplate = filterItems
-    .map((filter, index) => createFilterItemTemplate(filter, index === 0))
-    .join(``);
+export default class SiteFilter {
+  constructor(filters) {
+    this._filters = filters;
+    this._element = null;
+  }
 
-  return (
-    `<section class="main__filter filter container">
-      ${filterItemsTemplate}
-    </section>`
-  );
-};
+  getTemplate() {
+    return (
+      `<section class="main__filter filter container">
+        ${this._filters
+          .map((filter, index) => new FilterItem(filter, index === 0).getTemplate())
+          .join(``)
+      }
+      </section>`
+    );
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
