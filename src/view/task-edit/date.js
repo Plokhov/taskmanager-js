@@ -1,4 +1,4 @@
-import {humanizeTaskDueDate} from "../../utils.js";
+import {humanizeTaskDueDate} from "../../utils/task.js";
 
 export default class TaskEditDate {
   constructor(dueDate) {

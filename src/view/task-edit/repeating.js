@@ -1,4 +1,4 @@
-import {isTaskRepeating} from "../../utils";
+import {isTaskRepeating} from "../../utils/task.js";
 
 export default class TaskEditRepeating {
   constructor(repeating) {
