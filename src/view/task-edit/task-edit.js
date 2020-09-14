@@ -1,5 +1,6 @@
 import {COLORS} from "../../const.js";
-import {createElement, isTaskExpired, isTaskRepeating} from "../../utils.js";
+import {isTaskExpired, isTaskRepeating} from "../../utils/task.js";
+import Abstract from "../abstract.js";
 import TaskEditDate from "./date.js";
 import TaskEditRepeating from "./repeating.js";
 import TaskEditColors from "./colors.js";
@@ -21,10 +22,12 @@ const BLANK_TASK = {
   isFavorite: false
 };
 
-export default class TaskEdit {
+export default class TaskEditView extends Abstract {
   constructor(task) {
+    super();
     this._task = task || BLANK_TASK;
-    this._element = null;
+
+    this._formSubmitHandler = this._formSubmitHandler.bind(this);
   }
 
   getTemplate() {
@@ -93,15 +96,13 @@ export default class TaskEdit {
     );
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
+  _formSubmitHandler(evt) {
+    evt.preventDefault();
+    this._callback.formSubmit();
   }
 
-  removeElement() {
-    this._element = null;
+  setFormSubmitHandler(callback) {
+    this._callback.formSubmit = callback;
+    this.getElement().querySelector(`form`).addEventListener(`submit`, this._formSubmitHandler);
   }
 }

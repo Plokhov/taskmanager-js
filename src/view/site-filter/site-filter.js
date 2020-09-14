@@ -1,10 +1,10 @@
+import Abstract from "../abstract.js";
 import FilterItem from "./filter-item.js";
-import {createElement} from "../../utils.js";
 
-export default class SiteFilter {
+export default class SiteFilterView extends Abstract {
   constructor(filters) {
+    super();
     this._filters = filters;
-    this._element = null;
   }
 
   getTemplate() {
@@ -16,17 +16,5 @@ export default class SiteFilter {
       }
       </section>`
     );
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
