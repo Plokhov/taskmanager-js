@@ -1,4 +1,4 @@
-import {isTaskExpired, isTaskRepeating, humanizeTaskDueDate} from "../utils/task.js";
+import {isTaskExpired, isTaskRepeating, formatTaskDueDate} from "../utils/task.js";
 import Abstract from "./abstract.js";
 
 export default class TaskView extends Abstract {
@@ -21,9 +21,7 @@ export default class TaskView extends Abstract {
       isFavorite
     } = this._task;
 
-    const date = dueDate !== null
-      ? humanizeTaskDueDate(dueDate)
-      : ``;
+    const date = formatTaskDueDate(dueDate);
 
     const deadlineClassName = isTaskExpired(dueDate)
       ? `card--deadline`

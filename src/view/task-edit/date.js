@@ -1,4 +1,4 @@
-import {humanizeTaskDueDate} from "../../utils/task.js";
+import {formatTaskDueDate} from "../../utils/task.js";
 
 export default class TaskEditDate {
   constructor(dueDate, isDueDate) {
@@ -18,7 +18,7 @@ export default class TaskEditDate {
             type="text"
             placeholder=""
             name="date"
-            value="${this._dueDate !== null ? humanizeTaskDueDate(this._dueDate) : ``}"
+            value="${formatTaskDueDate(this._dueDate)}"
           />
         </label>
       </fieldset>` : ``}`
