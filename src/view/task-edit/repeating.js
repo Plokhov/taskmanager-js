@@ -1,8 +1,7 @@
-import {isTaskRepeating} from "../../utils/task.js";
-
 export default class TaskEditRepeating {
-  constructor(repeating) {
+  constructor(repeating, isRepeating) {
     this._repeating = repeating;
+    this._isRepeating = isRepeating;
   }
 
   getTemplate() {
@@ -10,10 +9,10 @@ export default class TaskEditRepeating {
       `<button class="card__repeat-toggle" type="button">
         repeat:
         <span class="card__repeat-status">
-          ${isTaskRepeating(this._repeating) ? `yes` : `no`}
+          ${this._isRepeating ? `yes` : `no`}
         </span>
       </button>
-      ${isTaskRepeating(this._repeating) ? `<fieldset class="card__repeat-days">
+      ${this._isRepeating ? `<fieldset class="card__repeat-days">
         <div class="card__repeat-days-inner">
           ${Object.entries(this._repeating).map(([day, repeat]) => `<input
             class="visually-hidden card__repeat-day-input"
