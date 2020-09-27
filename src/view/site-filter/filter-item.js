@@ -1,11 +1,11 @@
 export default class FilterItem {
-  constructor(filter, isChecked) {
+  constructor(filter, currentFilterType) {
     this._filter = filter;
-    this._isChecked = isChecked;
+    this._currentFilterType = currentFilterType;
   }
 
   getTemplate() {
-    const {name, count} = this._filter;
+    const {type, name, count} = this._filter;
 
     return (
       `<input
@@ -13,8 +13,9 @@ export default class FilterItem {
         id="filter__${name}"
         class="filter__input visually-hidden"
         name="filter"
-        ${this._isChecked ? `checked` : ``}
+        ${type === this._currentFilterType ? `checked` : ``}
         ${count === 0 ? `disabled` : ``}
+        value="${type}"
       />
       <label for="filter__${name}" class="filter__label">
         ${name}
