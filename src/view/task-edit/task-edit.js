@@ -51,7 +51,10 @@ export default class TaskEditView extends SmartView {
         task,
         {
           isDueDate: task.dueDate !== null,
-          isRepeating: isTaskRepeating(task.repeating)
+          isRepeating: isTaskRepeating(task.repeating),
+          isDisabled: false,
+          isSaving: false,
+          isDeleting: false
         }
     );
   }
@@ -77,6 +80,9 @@ export default class TaskEditView extends SmartView {
 
     delete data.isDueDate;
     delete data.isRepeating;
+    delete data.isDisabled;
+    delete data.isSaving;
+    delete data.isDeleting;
 
     return data;
   }
@@ -89,14 +95,17 @@ export default class TaskEditView extends SmartView {
       repeating,
       isDueDate,
       isRepeating,
+      isDisabled,
+      isSaving,
+      isDeleting
     } = this._data;
 
     const repeatingClassName = isRepeating
       ? `card--repeat`
       : ``;
 
-    const dateTemplate = new TaskEditDate(dueDate, isDueDate).getTemplate();
-    const repeatingTemplate = new TaskEditRepeating(repeating, isRepeating).getTemplate();
+    const dateTemplate = new TaskEditDate(dueDate, isDueDate, isDisabled).getTemplate();
+    const repeatingTemplate = new TaskEditRepeating(repeating, isRepeating, isDisabled).getTemplate();
     const colorsTemplate = new TaskEditColors(color).getTemplate();
 
     const isSubmitDisabled = (isDueDate && dueDate === null) || (isRepeating && !isTaskRepeating(repeating));
@@ -117,6 +126,7 @@ export default class TaskEditView extends SmartView {
                   class="card__text"
                   placeholder="Start typing your text here..."
                   name="text"
+                  ${isDisabled ? `disabled` : ``}
                 >${he.encode(description)}</textarea>
               </label>
             </div>
@@ -138,8 +148,12 @@ export default class TaskEditView extends SmartView {
             </div>
 
             <div class="card__status-btns">
-              <button class="card__save" type="submit" ${isSubmitDisabled ? `disabled` : ``}>save</button>
-              <button class="card__delete" type="button">delete</button>
+              <button class="card__save" type="submit" ${isSubmitDisabled || isDisabled ? `disabled` : ``}>
+                ${isSaving ? `saving...` : `save`}
+              </button>
+              <button class="card__delete" type="button" ${isDisabled ? `disabled` : ``}>
+                ${isDeleting ? `deleting...` : `delete`}
+              </button>
             </div>
           </div>
         </form>
