@@ -1,9 +1,10 @@
 import {formatTaskDueDate} from "../../utils/task.js";
 
 export default class TaskEditDate {
-  constructor(dueDate, isDueDate) {
+  constructor(dueDate, isDueDate, isDisabled) {
     this._dueDate = dueDate;
     this._isDueDate = isDueDate;
+    this._isDisabled = isDisabled;
   }
 
   getTemplate() {
@@ -19,6 +20,7 @@ export default class TaskEditDate {
             placeholder=""
             name="date"
             value="${formatTaskDueDate(this._dueDate)}"
+            ${this._isDisabled ? `disabled` : ``}
           />
         </label>
       </fieldset>` : ``}`

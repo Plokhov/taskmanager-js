@@ -1,7 +1,8 @@
 export default class TaskEditRepeating {
-  constructor(repeating, isRepeating) {
+  constructor(repeating, isRepeating, isDisabled) {
     this._repeating = repeating;
     this._isRepeating = isRepeating;
+    this._isDisabled = isDisabled;
   }
 
   getTemplate() {
@@ -21,6 +22,7 @@ export default class TaskEditRepeating {
             name="repeat"
             value="${day}"
             ${repeat ? `checked` : ``}
+            ${this._isDisabled ? `checked` : ``}
           />
           <label class="card__repeat-day" for="repeat-${day}"
             >${day}</label
