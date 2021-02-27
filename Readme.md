@@ -3,12 +3,12 @@
 ## О проекте
 «Менеджер задач» помогает пользователю организовывать и контролировать выполнение задач. Минималистичный интерфейс приложения не позволит пользователю отвлекаться по пустякам и сфокусирует внимание на главном — задачах.
 
+<img width="769" alt="taskmanager" src="https://up.htmlacademy.ru/assets/intensives/ecmascript/12/projects/taskmanager/image.png">
+
 ## Запустить проект
 - npm i
 - npm run build
 - npm run start
-
-<img width="769" alt="taskmanager" src="https://up.htmlacademy.ru/assets/intensives/ecmascript/12/projects/taskmanager/image.png">
 
 ### 1. Описание функциональности
 Приложение состоит из двух экранов: «Задачи» и «Статистика».
